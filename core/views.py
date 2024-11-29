@@ -14,6 +14,7 @@ from rest_framework import permissions, viewsets
 
 from core.serializers import GroupSerializer, UserSerializer
 from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -49,8 +50,9 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
 
 class TransactionModelViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter,DjangoFilterBackend]
     search_fields = ["description", 'currency__name']
+    filterset_fields = ['currency__code']
 
     def get_queryset(self):
         queryset = super().get_queryset()
