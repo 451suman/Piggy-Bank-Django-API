@@ -46,18 +46,19 @@ class CurrencyList(ListAPIView):
 class CategoryModelViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
 
 
 class TransactionModelViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
-    filter_backends = [filters.SearchFilter,DjangoFilterBackend]
-    search_fields = ["description", 'currency__name']
-    filterset_fields = ['currency__code']
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["description", "currency__name"]
+    filterset_fields = ["currency__code"]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.order_by("-id")
-        # return queryset.filter(currency__name="Euro").order_by("-id")
+        return Transaction.objects.select_related("currency", "category", "user").filter(user=self.request.user).order_by("-id")
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
