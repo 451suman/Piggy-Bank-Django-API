@@ -47,6 +47,7 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user)
 
@@ -58,9 +59,17 @@ class TransactionModelViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.select_related("currency", "category", "user").filter(user=self.request.user).order_by("-id")
+        return (
+            Transaction.objects.select_related("currency", "category", "user")
+            .filter(user=self.request.user)
+            .order_by("-id")
+        )
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
             return ReadTransactionSerializer
         return WriteTransactionSerializer
+
+
+
+
