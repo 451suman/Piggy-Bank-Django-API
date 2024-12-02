@@ -41,6 +41,7 @@ class CurrencyList(ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
     pagination_class = None
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
@@ -69,7 +70,3 @@ class TransactionModelViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return ReadTransactionSerializer
         return WriteTransactionSerializer
-
-
-
-
