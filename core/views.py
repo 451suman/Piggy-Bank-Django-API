@@ -55,8 +55,8 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
 
 class TransactionModelViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ["description", "currency__name"]
     filterset_fields = ["currency__code"]
+    search_fields = ["description", "currency__name"]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
