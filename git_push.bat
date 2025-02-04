@@ -1,19 +1,19 @@
 @echo off
 
 :: Check if commit message and branch name are provided
-if "%1"=="" (
+if "%~1"=="" (
     echo Error: Commit message is required.
     exit /b 1
 )
 
-if "%2"=="" (
+if "%~2"=="" (
     echo Error: Branch name is required.
     exit /b 1
 )
 
 :: Assign parameters to variables
-set COMMIT_MESSAGE=%1
-set BRANCH_NAME=%2
+set COMMIT_MESSAGE=%~1
+set BRANCH_NAME=%~2
 
 :: Add all changes to git
 git add .
